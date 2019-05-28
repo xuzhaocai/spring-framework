@@ -45,6 +45,9 @@ public class FileSystemResourceLoader extends DefaultResourceLoader {
 	 * @return the corresponding Resource handle
 	 * @see FileSystemResource
 	 * @see org.springframework.web.context.support.ServletContextResourceLoader#getResourceByPath
+	 *
+	 *
+	 *重写 以"/" 开头的资源
 	 */
 	@Override
 	protected Resource getResourceByPath(String path) {

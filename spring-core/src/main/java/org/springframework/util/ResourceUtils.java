@@ -373,6 +373,8 @@ public abstract class ResourceUtils {
 	/**
 	 * Create a URI instance for the given location String,
 	 * replacing spaces with "%20" URI encoding first.
+	 *
+	 * 使用"%20" 替换空格
 	 * @param location the location String to convert into a URI instance
 	 * @return the URI instance
 	 * @throws URISyntaxException if the location wasn't a valid URI

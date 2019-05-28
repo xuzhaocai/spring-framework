@@ -42,7 +42,7 @@ import org.springframework.util.ResourceUtils;
 public interface ResourceLoader {
 
 	/** Pseudo URL prefix for loading from the class path: "classpath:". */
-	String CLASSPATH_URL_PREFIX = ResourceUtils.CLASSPATH_URL_PREFIX;
+	String CLASSPATH_URL_PREFIX = ResourceUtils.CLASSPATH_URL_PREFIX;  // classpath 前缀
 
 
 	/**
@@ -63,6 +63,8 @@ public interface ResourceLoader {
 	 * @see #CLASSPATH_URL_PREFIX
 	 * @see Resource#exists()
 	 * @see Resource#getInputStream()
+	 *
+	 * 通过路径来获取资源对象
 	 */
 	Resource getResource(String location);
 
@@ -75,6 +77,8 @@ public interface ResourceLoader {
 	 * (only {@code null} if even the system ClassLoader isn't accessible)
 	 * @see org.springframework.util.ClassUtils#getDefaultClassLoader()
 	 * @see org.springframework.util.ClassUtils#forName(String, ClassLoader)
+	 *
+	 *
 	 */
 	@Nullable
 	ClassLoader getClassLoader();

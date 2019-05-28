@@ -50,6 +50,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 	@Nullable
 	private ClassLoader classLoader;
 
+	// 用户自定义资源 集合
 	private final Set<ProtocolResolver> protocolResolvers = new LinkedHashSet<>(4);
 
 	private final Map<Class<?>, Map<Resource, ?>> resourceCaches = new ConcurrentHashMap<>(4);
@@ -104,6 +105,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 	 * resolution rules. It may therefore also override any default rules.
 	 * @since 4.3
 	 * @see #getProtocolResolvers()
+	 * 添加用户的资源定义
 	 */
 	public void addProtocolResolver(ProtocolResolver resolver) {
 		Assert.notNull(resolver, "ProtocolResolver must not be null");
@@ -143,17 +145,19 @@ public class DefaultResourceLoader implements ResourceLoader {
 	@Override
 	public Resource getResource(String location) {
 		Assert.notNull(location, "Location must not be null");
-
+		// 用户自定义协议
 		for (ProtocolResolver protocolResolver : this.protocolResolvers) {
 			Resource resource = protocolResolver.resolve(location, this);
 			if (resource != null) {
 				return resource;
 			}
 		}
-
+		//以 "/" 开头的资源 使用  ClassPathContextResource
 		if (location.startsWith("/")) {
 			return getResourceByPath(location);
 		}
+
+		// 以classpath: 开头的使用  ClassPathResource
 		else if (location.startsWith(CLASSPATH_URL_PREFIX)) {
 			return new ClassPathResource(location.substring(CLASSPATH_URL_PREFIX.length()), getClassLoader());
 		}
@@ -161,9 +165,12 @@ public class DefaultResourceLoader implements ResourceLoader {
 			try {
 				// Try to parse the location as a URL...
 				URL url = new URL(location);
+				//  以这个些为前缀的  "file", "vfsfile" or "vfs".  都是 file
 				return (ResourceUtils.isFileURL(url) ? new FileUrlResource(url) : new UrlResource(url));
 			}
 			catch (MalformedURLException ex) {
+
+				// 最后使用  ClassPathContextResource 资源
 				// No URL -> resolve as resource path.
 				return getResourceByPath(location);
 			}
